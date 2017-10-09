@@ -19,6 +19,13 @@ Array.prototype.equals = function (anotherArray) {
   return true
 }
 
+Array.prototype.filterNotFalsies = function () {
+  var notFalsy = function (element) {
+    return !!element;
+  }
+  return this.filter(notFalsy)
+}
+
 module.exports = Array
 
 String.prototype.removeWhitespaces = function () {
