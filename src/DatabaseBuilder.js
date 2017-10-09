@@ -1,9 +1,8 @@
 var Database = require('./Database.js')
 var String = require('./Extensions.js').String
 var Array = require('./Extensions.js').Array
-var Rule = require('./Rule.js')
-var AbstractFact = require('./AbstractFact.js')
-var Fact = require('./Fact.js')
+var FactBuilder = require('./FactBuilder.js')
+var RuleBuilder = require('./RuleBuilder.js')
 
 var DatabaseBuilder = function () {
   var facts = []
@@ -20,24 +19,12 @@ var DatabaseBuilder = function () {
   this.addClause = function (clause) {
     clause = clause.removeWhitespaces()//TODO Refactor rule and fact creation
     if (isFact(clause)) {
-      var tokens = clause.split(/[,\(\).]/).filterNotFalsies()
-      
-      facts.push(new Fact(tokens.first(), tokens.rest()))
+      var factBuilder = new FactBuilder()
+      facts.push(factBuilder.buildFact(clause))
     }
     if (isRule(clause)) {
-      var tokensRule = clause.split(':-').filterNotFalsies()
-      var title = tokensRule.first()
-      var abstractFactsString = tokensRule[1].split("),").filterNotFalsies()
-      var abstractFacts = []
-      for (var i = 0; i < abstractFactsString.length; i++) {
-        var tokensFromAbsFact = abstractFactsString[i].split(/[,\(\).]/).filterNotFalsies()
-        abstractFacts.push(new AbstractFact(tokensFromAbsFact.first(), tokensFromAbsFact.rest()))
-      }
-      var titleTokens = title.split(/[,\(\).]/).filterNotFalsies()
-      var name = titleTokens.first()
-      var abstractParams = titleTokens.rest()
-
-      rules.push(new Rule(name, abstractParams, abstractFacts))
+      var ruleBuilder = new RuleBuilder()
+      rules.push(ruleBuilder.buildRule(clause))
     }
   }
   this.buildDB = function () {
