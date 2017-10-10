@@ -3,6 +3,7 @@ var String = require('./Extensions.js').String
 var Array = require('./Extensions.js').Array
 var FactBuilder = require('./FactBuilder.js')
 var RuleBuilder = require('./RuleBuilder.js')
+var InvalidClauseException = require('./InvalidClauseException.js')
 
 var DatabaseBuilder = function () {
   var facts = []
@@ -21,11 +22,14 @@ var DatabaseBuilder = function () {
     if (isFact(clause)) {
       var factBuilder = new FactBuilder()
       facts.push(factBuilder.buildFact(clause))
+      return
     }
     if (isRule(clause)) {
       var ruleBuilder = new RuleBuilder()
       rules.push(ruleBuilder.buildRule(clause))
+      return
     }
+    throw new InvalidClauseException()
   }
   this.buildDB = function () {
     return new Database(facts, rules)

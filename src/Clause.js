@@ -1,6 +1,6 @@
 var Clause = function () {
   this.matchesQuery = function (query) {
-    throw Error('Abstract class trying to be used')
+    throw new Error('Abstract class trying to be used')
   }
 }
 

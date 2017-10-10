@@ -10,7 +10,7 @@ var Fact = function (name, parameters) {
   }
 }
 
-Fact.prototype = Clause.prototype
+Fact.prototype = Object.create(Clause.prototype)
 Fact.prototype.constructor = Fact
 
 module.exports = Fact
